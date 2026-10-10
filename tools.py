@@ -87,6 +87,7 @@ def search_listings(
     for listing in theListings:
         if max_price is not None and listing["price"] > max_price:
             continue
+        if size is not None and 
 
         filteredListings.append(listing)
 
