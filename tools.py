@@ -87,7 +87,16 @@ def search_listings(
     for listing in theListings:
         if max_price is not None and listing["price"] > max_price:
             continue
-        if size is not None and 
+        
+        if size is not None:
+            print(filteredListings)
+            cleaned = listing["size"].upper()
+            cleaned = cleaned.replace("/", " ").replace("(", " ").replace(")", " ")
+            parts = []
+            parts = cleaned.split()
+            if size.upper() not in parts:
+                continue
+
 
         filteredListings.append(listing)
 
