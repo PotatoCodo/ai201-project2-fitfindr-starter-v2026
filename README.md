@@ -116,7 +116,6 @@ A user describes a secondhand clothing item in plain language, for example, "vin
 ```
 $ python -c "from agent import run_agent; from utils.data_loader import get_example_wardrobe; s = run_agent('vintage graphic tee under 30 dollars, size M', get_example_wardrobe()); print(s['error']); print(s['selected_item']); print(s['outfit_suggestion']); print(s['fit_card'])"
 
-
 None
 {'id': 'lst_017', 'title': 'Mesh Long-Sleeve Top — Black', 'description': 'Sheer black mesh long-sleeve. Great for layering under a graphic tee or over a bralette. Stretchy material, fits true to size.', 'category': 'tops', 'style_tags': ['y2k', 'grunge', 'goth', 'layering'], 'size': 'S/M', 'condition': 'excellent', 'price': 15.0, 'colors': ['black'],'brand': None, 'platform': 'depop'}
 Here are 5 specific, great-looking outfits you can make using your new **Mesh Long-Sleeve Top — Black** paired with items already in your wardrobe:
@@ -166,17 +165,55 @@ Picked up this sheer mesh long-sleeve on Depop for just $15 and it’s about to 
 
 ```
 $ python -c "from tools import search_listings; print(search_listings('graphic tee', max_price=30))"
-[PASTE OUTPUT]
+
+[{'id': 'lst_017', 'title': 'Mesh Long-Sleeve Top — Black', 'description': 'Sheer black mesh long-sleeve. Great for layering under a graphic tee or over a bralette. Stretchy material, fits true to size.', 'category': 'tops', 'style_tags': ['y2k', 'grunge', 'goth', 'layering'], 'size': 'S/M', 'condition': 'excellent', 'price': 15.0, 'colors': ['black'], 'brand': None, 'platform': 'depop'}, {'id': 'lst_002', 'title': 'Y2K Baby Tee — Butterfly Print', 'description': 'Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.', 'category': 'tops', 'style_tags': ['y2k', 'vintage', 'graphic tee', 'cottagecore'], 'size': 'S/M', 'condition': 'excellent', 'price': 18.0, 'colors': ['white', 'pink', 'purple'], 'brand': None, 'platform': 'depop'}, {'id': 'lst_006', 'title': 'Graphic Tee — 2003 Tour Bootleg Style', 'description': 'Vintage-style bootleg tee with faded graphic. Slightly boxy fit. 100% cotton, soft and worn-in.', 'category': 'tops', 'style_tags': ['graphic tee', 'vintage', 'grunge', 'streetwear', 'band tee'], 'size': 'L', 'condition': 'good', 'price': 24.0, 'colors': ['black'], 'brand': None, 'platform': 'depop'}, {'id': 'lst_015', 'title': 'Vintage Graphic Hoodie — Faded Black', 'description': 'Faded black pullover hoodie with barely-visible vintage graphic on the chest. Cozy interior. Some pilling but adds to the worn-in look.', 'category': 'tops', 'style_tags': ['vintage', 'grunge', 'graphic', 'streetwear'], 'size': 'L', 'condition': 'fair', 'price': 26.0, 'colors': ['black', 'charcoal'], 'brand': None, 'platform': 'depop'}, {'id': 'lst_033', 'title': 'Vintage BandTee — Faded Grey', 'description': 'Faded grey band-style tee with distressed graphic. Crew neck. Fits boxy. Well-loved but no holes or major damage.', 'category': 'tops', 'style_tags': ['vintage', 'grunge', 'band tee', 'graphic tee', 'streetwear'], 'size': 'L', 'condition': 'fair', 'price': 19.0, 'colors': ['grey', 'charcoal'], 'brand': None, 'platform': 'depop'}]
 ```
 
 ```
 $ python -c "from tools import suggest_outfit; from utils.data_loader import get_example_wardrobe, load_listings; print(suggest_outfit(load_listings()[0], get_example_wardrobe()))"
-[PASTE OUTPUT]
+
+Here are 5 specific, great-looking combinations you can make using your **Vintage Levi's 501 Jeans (Medium Wash)** along with items already in your wardrobe:
+
+### 1. Casual 90s Streetwear Look
+*The perfect effortless, everyday outfit utilizing classic basics and chunky sneakers.*
+* **Top:** White ribbed tank top — already in your wardrobe! (w_003)
+* **Outerwear:** Vintage black denim jacket — already in your wardrobe! (w_006)
+* **Shoes:** Chunky white sneakers — already in your wardrobe! (w_007)
+* **Accessories:** Black crossbody bag — already in your wardrobe! (w_010)
+
+### 2. Cozy & Contrast Grunge Fit
+*A great play on proportions, pairing the fitted vintage 501s with a super-cozy, oversized layer and edgy boots.*
+* **Top:** Oversized grey crewneck sweatshirt — already in your wardrobe! (w_004)
+* **Shoes:** Black combat boots — already in your wardrobe! (w_008)
+* **Accessories:** Brown leather belt — already in your wardrobe! (w_009)
+* **Accessories:** Black crossbody bag — already in your wardrobe! (w_010)
+
+### 3. Sporty-Casual Street Style
+*A high-contrast, effortless look that balances the vintage wash denim with a sharp, cropped athletic silhouette.*
+* **Top:** Black cropped zip hoodie — already in your wardrobe! (w_005)
+* **Top (Layering):** White ribbed tank top — already in your wardrobe! (w_003) *(worn underneath unzipped)*
+* **Shoes:** Chunky white sneakers — already in your wardrobe! (w_007)
+* **Accessories:** Black crossbody bag — already in your wardrobe! (w_010)
+
+### 4. Layered Vintage Monochrome
+*A timeless double-denim-adjacent streetwear aesthetic featuring black and medium indigo tones.*
+* **Top:** White ribbed tank top — already in your wardrobe! (w_003)
+* **Outerwear:** Vintage black denim jacket — already in your wardrobe! (w_006)
+* **Shoes:** Black combat boots — already in your wardrobe! (w_008)
+* **Accessories:** Brown leather belt — already in your wardrobe! (w_009)
+
+### 5. Relaxed Minimalist Off-Duty
+*A clean, comfortable combination that lets the classic medium wash denim take center stage with minimal, cozy additions.*
+* **Top:** Oversized grey crewneck sweatshirt — already in your wardrobe! (w_004)
+* **Shoes:** Chunky white sneakers — already in your wardrobe! (w_007)
+* **Accessories:** Brown leather belt — already in your wardrobe! (w_009)
+* **Accessories:** Black crossbody bag — already in your wardrobe! (w_010)
 ```
 
 ```
-$ python -c "from tools import create_fit_card; ..."
-[PASTE COMMAND AND OUTPUT]
+python -c "from tools import create_fit_card; from utils.data_loader import load_listings; print(create_fit_card('red and black striped sweatpants and orange sneakers', load_listings()[0]))"
+
+Unapologetically clashing today because life's too short to match your sweats 🏁 grabbed these vintage Levi's 501s for $38 on depop to ground the chaos.
 ```
 
 ---
@@ -192,15 +229,15 @@ $ python -c "from tools import create_fit_card; ..."
 
 **Moment 1**
 
-- *What I asked for:* How to get the item description, size, and max price out of the user's query using the model. My first prompt asked for comma-separated output, with the string `None` for missing values.
-- *What came back:* Claude pointed out two problems: commas in a description would break `split(",")`, and the model would return the string `"None"`, which passes an `is not None` check. It suggested JSON output so missing values come back as `null`, plus a `parse_query` helper that also converts `"None"`/`"null"` strings to a real `None`.
-- *What I changed:* I switched the prompt to JSON, added `parse_query` to `agent.py`, and made it return `None` on any failure so `run_agent` has a single check. I also fixed my first loop draft, which never incremented its counter and returned `{}` on a parse failure instead of the session.
+- *What I asked for:* I pasted my search_listings loop, which crashed with AttributeError: 'dict' object has no attribute 'price', and asked what was wrong. I also asked how to filter by size without false matches (for example, searching “S” shouldn’t return “US 7” or “One Size”, but should return “S/M”).
+- *What came back:* Claude pointed out that listings are dicts, so I needed listing["price"] instead of listing.price. It also warned that calling .remove() on a list while looping over it skips items, and suggested building a new list of matches instead. For sizes, it suggested replacing /, ( and ) with spaces, splitting into whole words, and checking size in parts instead of a substring check.
+- *What I changed:* I rewrote the filter as a loop with continue statements so I could keep adding filters (category, platform, etc.) one at a time. I also added category to the function’s parameters, since it was missing. I kept the size cleaning inline, inside an if size is not None: block, so it doesn’t crash when no size is passed.
 
 **Moment 2**
 
-- *What I asked for:* A review of my test run for "vintage graphic tee under 30 dollars, size M".
-- *What came back:* The pipeline ran end to end, but the selected item was a black mesh top, not a graphic tee. Claude traced it to my scoring in `search_listings`, which only matched words in the description and brand (so "layering under a graphic tee" counted) and ignored the title. Punctuation like `tee.` also failed to match.
-- *What I changed:* `[CHECK: edit to match what you actually did]` I rewrote the scoring to tokenize with a regex, search title, category, and style tags as well, and weight title matches higher than other matches. Then I reran the query to check the ranking.
+- *What I asked for:* Bits and pieces of agent.py and asking to explain what it's doing, before resorting to the full version with context added after lots of confusion
+- *What came back:* Snippets that were attempted to be pieced together, then the full working version of the entire run_agent method and helper method.
+- *What I changed:* After testing the working code, I gave Claude the outputs for suggestions for further edits and allowed it to implement those edits once reading and approving them.
 
 
 <!-- ═══════════════════════ UNIT 4 — THE TEST ═══════════════════════
