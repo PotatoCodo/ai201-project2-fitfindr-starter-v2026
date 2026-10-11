@@ -15,8 +15,68 @@ Build and test your three tools in `tools.py` first. Then come here.
 
 import config
 import trace
+import json
 from tools import search_listings, suggest_outfit, create_fit_card
-from generate import ModelUnavailable
+from generate import ModelUnavailable, generate
+# from trace import step, start_trace, get_trace, check_iterations
+
+
+PARSE_SYSTEM_PROMPT = (
+    "Extract the item description, size, and maximum price from the user's query. "
+    "Respond with ONLY a JSON object with these keys: "
+    '"description" (string), "size" (string or null), "max_price" (integer in dollars, '
+    "no symbols, or null). Use null for any value that is not present. "
+    "Do not include markdown or any other text."
+)
+
+
+def parse_query(query: str) -> dict | None:
+    """
+    Ask the model to pull description / size / max_price out of the query.
+
+    Returns a dict with those three keys, or None if the response
+    couldn't be parsed or no item description was found.
+    """
+    response = generate(query, PARSE_SYSTEM_PROMPT)
+
+    # Strip code fences in case the model adds them anyway
+    text = (
+        response.strip()
+        .removeprefix("```json")
+        .removeprefix("```")
+        .removesuffix("```")
+        .strip()
+    )
+
+    try:
+        data = json.loads(text)
+    except json.JSONDecodeError:
+        return None
+
+    if not isinstance(data, dict):
+        return None
+
+    description = data.get("description")
+    if isinstance(description, str):
+        description = description.strip() or None
+    if description is None:
+        return None
+
+    # Models occasionally return the string "None" or "null" instead of null
+    size = data.get("size")
+    if isinstance(size, str) and size.strip().lower() in ("none", "null", ""):
+        size = None
+
+    try:
+        max_price = int(data["max_price"]) if data.get("max_price") is not None else None
+    except (TypeError, ValueError):
+        max_price = None
+
+    return {
+        "description": description,
+        "size": size,
+        "max_price": max_price,
+    }
 
 
 # ── session state ─────────────────────────────────────────────────────────────
@@ -105,11 +165,52 @@ def run_agent(query: str, wardrobe: dict) -> dict:
       • A handler for ModelUnavailable, so a bad key produces a message rather
         than a stack trace. The import is already at the top of this file.
     """
+
     session = new_session(query, wardrobe)
 
     # TODO: delete these two lines and build the loop.
-    session["error"] = "The planning loop isn't built yet — see the TODO in agent.py."
-    return session
+    # session["error"] = "The planning loop isn't built yet — see the TODO in agent.py."
+
+    loop_count = 0
+    while True:
+        loop_count += 1
+        trace.check_iterations(loop_count)
+
+        # 1. Parse the query
+        parsed = parse_query(query)
+        if parsed is None:
+            session["error"] = (
+                "I couldn't tell what item you're after. "
+                "Try something like 'vintage graphic tee under $30, size M'."
+            )
+            return session
+        session["parsed"] = parsed
+
+        # 2. Search. This is the branch: stop here if nothing came back.
+        session["search_results"] = search_listings(
+            parsed["description"], parsed["size"], parsed["max_price"]
+        )
+        if not session["search_results"]:
+            session["error"] = (
+                f"Nothing matched '{parsed['description']}'. Try a broader "
+                "description, a different size, or a higher max price."
+            )
+            return session
+
+        # 3. Choose an item (first result is fine)
+        session["selected_item"] = session["search_results"][0]
+
+        # 4. Outfit suggestion
+        session["outfit_suggestion"] = suggest_outfit(
+            session["selected_item"], session["wardrobe"]
+        )
+
+        # 5. Fit card
+        session["fit_card"] = create_fit_card(
+            session["outfit_suggestion"], session["selected_item"]
+        )
+
+        return session
 
 
 # ── running it directly ───────────────────────────────────────────────────────

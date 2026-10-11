@@ -81,7 +81,6 @@ def search_listings(
     # TODO: replace this with your implementation
 
     theListings = load_listings()
-    print(len(theListings))
     filteredListings = []
 
     for listing in theListings:
@@ -89,24 +88,17 @@ def search_listings(
             continue
 
         if size is not None:
-            print(filteredListings)
-            cleaned = listing["size"].upper()
+            cleaned = (listing.get("size") or "").upper()
             cleaned = cleaned.replace("/", " ").replace("(", " ").replace(")", " ")
             parts = []
             parts = cleaned.split()
             if size.upper() not in parts:
                 continue
 
-
         filteredListings.append(listing)
 
-    print(len(filteredListings))
-
-    
-    
     matchWords = (description.upper().split())
-
-    print(matchWords)
+    scored = []
 
     for listing in filteredListings:
         cleaned = listing["description"].upper()
@@ -121,12 +113,11 @@ def search_listings(
             if word in parts:
                 score+= 1
 
-        listing["score"] = score
+        if score > 0:
+            scored.append((score, listing))
 
-    filteredListings = [l for l in filteredListings if l["score"] > 0]
-    filteredListings.sort(key=lambda l: l["score"], reverse=True)
-
-    return filteredListings
+    scored.sort(key=lambda pair: pair[0], reverse=True)
+    return [listing for score, listing in scored]
 
 
 # ── Tool 2: suggest_outfit ────────────────────────────────────────────────────
@@ -161,8 +152,6 @@ def suggest_outfit(new_item: dict, wardrobe: dict) -> str:
     """
     # TODO: replace this with your implementation
     
-    response = ""
-    new_item_text= ""
     new_item_text = ", ".join(f"{key}: {value}" for key, value in new_item.items())
 
     if not wardrobe or len(wardrobe["items"]) == 0:
@@ -170,6 +159,7 @@ def suggest_outfit(new_item: dict, wardrobe: dict) -> str:
             "Give some general advice and suggest general styling ideas for this item.  "
             "Try giving some (5) general outfits they could make with this item:\n" + new_item_text
         )
+        return response
 
     wardrobe_item_text = ", ".join(f"{key}: {value}" for key, value in wardrobe.items())
     response = generate(
@@ -226,7 +216,9 @@ def create_fit_card(outfit: str, new_item: dict) -> str:
     new_item_text = ", ".join(f"{key}: {value}" for key, value in new_item.items())
     caption = generate(
         "Create a short caption someone would actually post about this outfit find:\n" 
-        + new_item_text + "\nThe caption should read like a real post rather than a "
+        f"New item: {new_item_text}\n"
+        f"The rest of the outfit: {outfit}\n"
+        "\nThe caption should read like a real post rather than a "
         "product description, mention the item and its price and platform once each, "
         "and be specific about the vibe.  Respond with only the caption."
     )
