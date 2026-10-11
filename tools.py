@@ -125,7 +125,7 @@ def search_listings(
 
     filteredListings = [l for l in filteredListings if l["score"] > 0]
     filteredListings.sort(key=lambda l: l["score"], reverse=True)
-    
+
     return filteredListings
 
 
@@ -160,7 +160,28 @@ def suggest_outfit(new_item: dict, wardrobe: dict) -> str:
         python -c "from tools import suggest_outfit; from utils.data_loader import get_example_wardrobe, load_listings; print(suggest_outfit(load_listings()[0], get_example_wardrobe()))"
     """
     # TODO: replace this with your implementation
-    return ""
+    
+    response = ""
+    new_item_text= ""
+    new_item_text = ", ".join(f"{key}: {value}" for key, value in new_item.items())
+
+    if not wardrobe or len(wardrobe["items"]) == 0:
+        response = generate(
+            "Give some general advice and suggest general styling ideas for this item.  "
+            "Try giving some (5) general outfits they could make with this item:\n" + new_item_text
+        )
+
+    else:
+        wardrobe_item_text = ", ".join(f"{key}: {value}" for key, value in wardrobe.items())
+        response = generate(
+            "Give a few (5) specific good-looking combinations that can be made with this " 
+            "item:\n" + new_item_text + "\nUsing it with these items already present:\n" + 
+            wardrobe_item_text + " Remember to name each item specifically used in each "
+            "combination that the user already owns like '(item) - already in your wardrobe!'"
+        )
+        
+
+    return response
 
 
 # ── Tool 3: create_fit_card ───────────────────────────────────────────────────
