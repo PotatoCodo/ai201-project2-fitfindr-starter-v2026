@@ -87,7 +87,7 @@ def search_listings(
     for listing in theListings:
         if max_price is not None and listing["price"] > max_price:
             continue
-        
+
         if size is not None:
             print(filteredListings)
             cleaned = listing["size"].upper()
@@ -101,6 +101,31 @@ def search_listings(
         filteredListings.append(listing)
 
     print(len(filteredListings))
+
+    
+    
+    matchWords = (description.upper().split())
+
+    print(matchWords)
+
+    for listing in filteredListings:
+        cleaned = listing["description"].upper()
+        if listing["brand"]:
+            cleaned = cleaned + " " + listing["brand"].upper()
+
+        cleaned = cleaned.replace("/", " ").replace("(", " ").replace(")", " ").replace("'", " ")
+        parts = cleaned.split()
+
+        score = 0
+        for word in matchWords:
+            if word in parts:
+                score+= 1
+
+        listing["score"] = score
+
+    filteredListings = [l for l in filteredListings if l["score"] > 0]
+    filteredListings.sort(key=lambda l: l["score"], reverse=True)
+    
     return filteredListings
 
 
