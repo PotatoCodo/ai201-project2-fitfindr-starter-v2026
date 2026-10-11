@@ -31,6 +31,9 @@ tool calls and returns a fit card — in at least 4 of 5 tries.
 
 ---
 
+My search is, more or less, a plain keyword match, and some phrasings will miss.  My keyword scoring matches whole words only, so ‘jeans’ won’t match ‘denim’, and ‘tee’ won’t match ‘T-shirt
+
+
 ## 2. An impossible query stops before the second tool
 
 Given a query that matches no listings, the agent stops before calling
@@ -39,8 +42,11 @@ Given a query that matches no listings, the agent stops before calling
 **Why this target:**
 <!-- Why is 5 of 5 reasonable here when criterion 1 isn't? What's different
      about this path? -->
+     
 
 ---
+There’s no model or ranking judgment on this path. Search is plain Python: filters plus a keyword score, and I drop listings with score > 0. If nothing survives, the list is empty, and checking for an empty list is a deterministic if not results:. Criterion 1 can miss because phrasing varies, but here the outcome doesn’t depend on phrasing. So 5 of 5 is fair, and anything less would mean a bug in my code, not variance in the tool.
+     
 
 ## 3. Something about state
 
@@ -54,11 +60,11 @@ Given a query that matches no listings, the agent stops before calling
      compares session["selected_item"] against what actually reached
      suggest_outfit is the shape you're after. -->
 
-
+In 5 of 5 tries with a matching query, the id of the listing stored as the selected item (e.g. lst_004) equals the id of the item passed into suggest_outfit, and the item text sent in the prompt contains that listing’s title.
 
 **Why this target:**
 
-
+State failures look like tool problems. If the wrong item reaches suggest_outfit, the advice is still fluent, just about the wrong jeans. Comparing ids is countable and doesn’t depend on the model’s wording. I picked 5 of 5 because this is plain data passing in my own code, with no model randomness. A single mismatch means my loop is dropping or overwriting the item, not that the tool had a bad day.
 
 ---
 
@@ -75,11 +81,11 @@ Given a query that matches no listings, the agent stops before calling
      sentence? A card longer than a caption anyone would post? Any of those can
      be turned into a number. -->
 
-
+In 5 of 5 tries, the fit card (a) mentions the item’s price or title, (b) is no longer than 100 words, and (c) for two different items, doesn’t share the same first sentence.
 
 **Why this target:**
 
-
+The card calls a model, so exact wording will vary and I can’t test for specific text. What I can test is things a person would be unhappy to see: a caption that ignores the price, one too long to post, or the same generic opening for different items. These checks are countable without judging style. I chose 5 of 5 because each check is loose enough that a working prompt should pass every time. If it fails, the prompt is probably underspecified (for example, it doesn’t tell the model to include the price or a length limit).
 
 ---
 
@@ -92,11 +98,11 @@ Given a query that matches no listings, the agent stops before calling
      search respects a price ceiling — anything, as long as it names a number
      or an observable outcome. -->
 
-
+In 5 of 5 searches with a max_price set, every returned listing has price <= max_price, including the edge case where a listing’s price equals max_price exactly. Also, max_price=0 is treated as a real filter, not as “no filter.”
 
 **Why this target:**
 
-
+My first version of the price filter had two bugs: it removed items while looping (which skips elements), and if max_price: treats 0 as no filter. Either could return over-budget items without raising an error, so nothing would warn me. This is a hard rule for a shopping tool, because showing someone a $55 item after they said $30 is a visible failure. It’s also deterministic, so a miss means a bug, not variance.
 
 ---
 
