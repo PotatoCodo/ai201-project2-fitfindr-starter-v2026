@@ -171,15 +171,13 @@ def suggest_outfit(new_item: dict, wardrobe: dict) -> str:
             "Try giving some (5) general outfits they could make with this item:\n" + new_item_text
         )
 
-    else:
-        wardrobe_item_text = ", ".join(f"{key}: {value}" for key, value in wardrobe.items())
-        response = generate(
-            "Give a few (5) specific good-looking combinations that can be made with this " 
-            "item:\n" + new_item_text + "\nUsing it with these items already present:\n" + 
-            wardrobe_item_text + " Remember to name each item specifically used in each "
-            "combination that the user already owns like '(item) - already in your wardrobe!'"
-        )
-        
+    wardrobe_item_text = ", ".join(f"{key}: {value}" for key, value in wardrobe.items())
+    response = generate(
+        "Give a few (5) specific good-looking combinations that can be made with this " 
+        "item:\n" + new_item_text + "\nUsing it with these items already present:\n" + 
+        wardrobe_item_text + " Remember to name each item specifically used in each "
+        "combination that the user already owns like '(item) - already in your wardrobe!'"
+    )
 
     return response
 
@@ -221,4 +219,15 @@ def create_fit_card(outfit: str, new_item: dict) -> str:
         python -c "from tools import create_fit_card; from utils.data_loader import load_listings; print(create_fit_card('jeans and white sneakers', load_listings()[0]))"
     """
     # TODO: replace this with your implementation
-    return ""
+
+    if outfit is None or not outfit.strip():
+        return "Outfit is missing or is whitespace only."
+
+    new_item_text = ", ".join(f"{key}: {value}" for key, value in new_item.items())
+    caption = generate(
+        "Create a short caption someone would actually post about this outfit find:\n" 
+        + new_item_text + "\nThe caption should read like a real post rather than a "
+        "product description, mention the item and its price and platform once each, "
+        "and be specific about the vibe.  Respond with only the caption."
+    )
+    return caption
