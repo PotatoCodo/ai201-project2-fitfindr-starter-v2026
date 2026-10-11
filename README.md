@@ -115,6 +115,8 @@ A user describes a secondhand clothing item in plain language, for example, "vin
 
 ```
 $ python -c "from agent import run_agent; from utils.data_loader import get_example_wardrobe; s = run_agent('vintage graphic tee under 30 dollars, size M', get_example_wardrobe()); print(s['error']); print(s['selected_item']); print(s['outfit_suggestion']); print(s['fit_card'])"
+
+
 None
 {'id': 'lst_017', 'title': 'Mesh Long-Sleeve Top — Black', 'description': 'Sheer black mesh long-sleeve. Great for layering under a graphic tee or over a bralette. Stretchy material, fits true to size.', 'category': 'tops', 'style_tags': ['y2k', 'grunge', 'goth', 'layering'], 'size': 'S/M', 'condition': 'excellent', 'price': 15.0, 'colors': ['black'],'brand': None, 'platform': 'depop'}
 Here are 5 specific, great-looking outfits you can make using your new **Mesh Long-Sleeve Top — Black** paired with items already in your wardrobe:
