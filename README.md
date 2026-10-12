@@ -239,6 +239,18 @@ Unapologetically clashing today because life's too short to match your sweats �
 - *What came back:* Snippets that were attempted to be pieced together, then the full working version of the entire run_agent method and helper method.
 - *What I changed:* After testing the working code, I gave Claude the outputs for suggestions for further edits and allowed it to implement those edits once reading and approving them.
 
+## Stretch Features:
+
+**A second branch**
+A parse-failure branch in agent.py - when the original query could not be parsed properly.
+
+```
+python -c "from agent 
+import run_agent; from utils.data_loader import get_example_wardrobe; s = run_agent('asdfghjk893kl', get_example_wardrobe()); print(s['error']); print(s['selected_item'], s['outfit_suggestion'], s['fit_card'])"
+
+I couldn't tell what item you're after. Try something like 'vintage graphic tee under $30, size M'.
+None None None
+```
 
 <!-- ═══════════════════════ UNIT 4 — THE TEST ═══════════════════════
 
