@@ -59,7 +59,7 @@ A user describes a secondhand clothing item in plain language, for example, "vin
 
 ### `search_listings`
 
-- **What it does:** Filters the resale listings by max price and size, then ranks the remaining listings by how many words from the item description appear in each listing's text (title matches count more than description, brand, category, or style-tag matches).
+- **What it does:** Filters the resale listings by max price and size, then ranks the remaining listings by how many words from the item description appear in each listing's text (description and brand).
 - **Inputs:** <!-- name and type each: `max_price` (float), not "a price" -->
   `description` (str), `size` (str or None), `max_price` (float or None)
 - **Returns:** A list of listing dicts, best match first. Each dict has the keys `id`, `title`, `description`, `category`, `style_tags`, `size`, `condition`, `price`, `colors`, `brand`, and `platform`. Only listings with at least one matching word are included.
