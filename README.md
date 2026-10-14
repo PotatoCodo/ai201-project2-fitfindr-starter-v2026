@@ -69,13 +69,13 @@ A user describes a secondhand clothing item in plain language, for example, "vin
 
 - **What it does:** Uses the model to build several outfit ideas that pair the selected listing with items from the user's wardrobe.
 - **Inputs:** `item` (dict, one listing from `search_listings`), `wardrobe` (dict, from `get_example_wardrobe()` or `get_empty_wardrobe()`)
-- **Returns:** A string of formatted text containing 5 outfit ideas. Each has a title, a one-line style note, and a list of pieces, marking which are the new items and which are already in the wardrobe. `[CHECK: confirm the return type and count]`
+- **Returns:** A string of formatted text containing 5 outfit ideas. Each has a title, a one-line style note, and a list of pieces, marking which are the new items and which are already in the wardrobe. 
 - **When it has nothing:** returns outfit ideas that suggest generic pieces and styling advice using that item
 
 ### `create_fit_card`
 
 - **What it does:** Uses the model to write a short, first-person social-media-style caption about the thrifted find and how it will be styled.
-- **Inputs:** `outfit` (str, the output of `suggest_outfit`), `item` (dict, the selected listing) `[CHECK: argument order and types]`
+- **Inputs:** `outfit` (str, the output of `suggest_outfit`), `item` (dict, the selected listing) 
 - **Returns:** A short caption string that mentions the item, its price, and the platform it was found on, with an emoji.
 - **When it has nothing:**  A fallback message if the outfit or item is missing
 
